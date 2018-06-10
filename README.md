@@ -39,7 +39,7 @@ details.
 You could setup your own proxy using blynk-proxy,
 or if after understanding the
 [risks](https://github.com/fishy/blynk-proxy/blob/master/README.md#should-i-use-your-heroku-app)
-you still doesn't mind, you could use `https://blynk-proxy.herokuapp.com`.
+you still don't mind, you could use `https://blynk-proxy.herokuapp.com`.
 
 ### State Refresh Rate
 
