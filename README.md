@@ -44,8 +44,8 @@ you still don't mind, you could use `https://blynk-proxy.herokuapp.com`.
 ### State Refresh Rate
 
 We couldn't push the garage door state to SmartThings right now so the update of
-the state initiate rely on refresh requests from SmartThings to Blynk server.
-This preference controls how frequent we send the refresh requests.
+the state rely on refresh requests initiated from SmartThings to Blynk server.
+This preference controls how frequent we send those refresh requests.
 
 If you don't have a Contact Sensor setup with your OpenGarage,
 you would need a more frequent refresh rate to keep the state up-to-date.
@@ -54,9 +54,9 @@ you would need a more frequent refresh rate to keep the state up-to-date.
 
 [garage-with-contact-sensor.groovy](garage-with-contact-sensor.groovy)
 
-This is a SmartApp to help you better get more up-to-date state of your
-OpenGarage
-(or any other unofficially supported garage device that doesn't needs pull).
+This is a SmartApp to help you get more up-to-date state of your OpenGarage
+(or any other unofficially supported garage device that doesn't needs pull)
+more efficiently.
 
 First you'll need a separated Contact Sensor installed on your garage door.
 
