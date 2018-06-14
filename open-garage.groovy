@@ -279,7 +279,7 @@ def forceRefreshUntil(data) {
 			overwrite: true,
 			data: data,
 		]
-		runIn(1, forceRefreshUntil, options)
+		runIn(3, forceRefreshUntil, options)
 	} else {
 		unschedule(forceRefreshUntil)
 	}
