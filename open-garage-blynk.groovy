@@ -1,5 +1,5 @@
 /**
- *  SmartThings device handler for OpenGarage.
+ *  SmartThings device handler for OpenGarage via Blynk.
  *
  *  Copyright 2018 Yuxuan "fishy" Wang
  *
@@ -19,7 +19,7 @@
  */
 
 metadata {
-	definition(name: "OpenGarage", namespace: "fishy", author: "Yuxuan Wang") {
+	definition(name: "OpenGarage-Blynk", namespace: "fishy", author: "Yuxuan Wang") {
 		capability "Contact Sensor"
 		capability "Door Control"
 		capability "Garage Door Control"
@@ -247,7 +247,7 @@ def doRefresh() {
 }
 
 def afterForceRefresh(status, startTime) {
-	time = (now() - startTime) / 1000
+	def time = (now() - startTime) / 1000
 	log.debug "Final Door Status: $status, took $time seconds"
 	setDoorState(status)
 }

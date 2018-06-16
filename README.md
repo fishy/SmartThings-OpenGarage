@@ -4,9 +4,9 @@ This repository provides a [SmartThings](https://www.smartthings.com/)
 Device Handler for [OpenGarage](https://opengarage.io),
 and two SmartApps to help you automate your garage door.
 
-## Device Handler
+## Device Handler (via Blynk)
 
-[open-garage.groovy](open-garage.groovy)
+[open-garage-blynk.groovy](open-garage-blynk.groovy)
 
 First you need to setup your [OpenGarage](https://opengarage.io) normally,
 including the [Blynk](https://blynk.cc) integration steps.
