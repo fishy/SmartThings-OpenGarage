@@ -121,9 +121,9 @@ This preference controls how frequent we send those refresh requests.
 If you don't have a Contact Sensor setup with your OpenGarage,
 you would need a more frequent refresh rate to keep the state up-to-date.
 
-## Garage Door with Contact Sensor SmartApp
+## Garage Door Helper SmartApp
 
-[garage-with-contact-sensor.groovy](garage-with-contact-sensor.groovy)
+[garage-door-helper.groovy](garage-door-helper.groovy)
 
 This is a SmartApp to help you get more up-to-date state of your OpenGarage
 (or any other unofficially supported garage device that doesn't needs pull)
@@ -141,6 +141,9 @@ select your OpenGarage as the garage door and the contact sensor.
 The idea behind this SmartApp is that whenever the contact sensor's state
 changes, it will ask the garage door to refresh its state,
 so your garage door's state will update in seconds instead of minutes.
+
+You can also get push/sms notifications when your garage door device handler has
+HTTP request failures.
 
 ## Presence and Garage Door SmartApp
 

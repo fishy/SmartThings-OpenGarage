@@ -1,5 +1,5 @@
 /**
- *  Garage Door with Contact Sensor.
+ *  Garage Door Helper.
  *
  *  Copyright 2018 Yuxuan "fishy" Wang
  *
@@ -15,7 +15,7 @@
  */
 
 definition(
-	name: "Garage Door with Contact Sensor",
+	name: "Garage Door Helper",
 	namespace: "fishy",
 	author: "Yuxuan Wang",
 	description: "Use contact sensor to better refresh garage door state",
@@ -41,9 +41,8 @@ preferences {
 			"capability.contactSensor",
 			title: "Pick a contact sensor",
 			multiple: false,
+			required: false,
 		)
-	}
-	section("Refresh") {
 		input(
 			"refresh_rate",
 			"number",
@@ -54,6 +53,19 @@ preferences {
 			"max_refresh",
 			"number",
 			title: "stop refreshing after N minutes (default 2)",
+			required: false,
+		)
+	}
+	section("Notification") {
+		input(
+			"push_notif",
+			"bool",
+			title: "Send push notification when Garage Door device handler failed",
+		)
+		input(
+			"phone",
+			"text",
+			title: "Phone number to send SMS notification",
 			required: false,
 		)
 	}
@@ -74,7 +86,12 @@ def updated() {
 }
 
 def initialize() {
-	subscribe(contact, "contact", contactHandler)
+	if (contact) {
+		subscribe(contact, "contact", contactHandler)
+	}
+	if (push_notif || phone) {
+		subscribe(door, "lastHttpStatus", httpHandler)
+	}
 }
 
 def getRefreshRate() {
@@ -113,5 +130,18 @@ def contactHandler(evt) {
 		def timestamp = now() + 60 * 1000 * getMaxRefresh()
 		def data = [stopAt: timestamp]
 		forceRefreshGarageState(data)
+	}
+}
+
+def httpHandler(evt) {
+	log.debug "httpHandler: $evt.value: $evt, $settings"
+	if (evt.isStateChange() && evt.value == "failed") {
+		def msg = "Garage ${door.label ?: door.name} http request failed, please check your settings."
+		if (push_notif) {
+			sendPush(msg)
+		}
+		if (phone) {
+			sendSms(phone, msg)
+		}
 	}
 }
