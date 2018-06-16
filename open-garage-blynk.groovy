@@ -29,6 +29,7 @@ metadata {
 		capability "Switch"
 
 		attribute "doorStatus", "string"
+		attribute "lastHttpStatus", "string"
 	}
 
 	preferences {
@@ -369,16 +370,41 @@ def flipDoor() {
 def setContactSensorState(status) {
 	// Sync contact sensor
 	if (status == "open" || status == "opening" || status == "stopped") {
-		sendEvent(name: "contact", value: "open", display: true, descriptionText: "Contact is open")
-		sendEvent(name: "switch", value: "on", display: true, descriptionText: "Switch is on")
+		sendEvent(
+			name: "contact",
+			value: "open",
+			displayed: true,
+			descriptionText: "Contact is open",
+		)
+		sendEvent(
+			name: "switch",
+			value: "on",
+			displayed: true,
+			descriptionText: "Switch is on",
+		)
 	} else if (status == "closed" || status == "closing") {
-		sendEvent(name: "contact", value: "closed", display: true, descriptionText: "Contact is closed")
-		sendEvent(name: "switch", value: "off", display: true, descriptionText: "Switch is off")
+		sendEvent(
+			name: "contact",
+			value: "closed",
+			displayed: true,
+			descriptionText: "Contact is closed",
+		)
+		sendEvent(
+			name: "switch",
+			value: "off",
+			displayed: true,
+			descriptionText: "Switch is off",
+		)
 	}
 }
 
 def setDoorState(status) {
-	sendEvent(name: "doorStatus", value: status, display: true, descriptionText: "Door is $status")
+	sendEvent(
+		name: "doorStatus",
+		value: status,
+		displayed: true,
+		descriptionText: "Door is $status",
+	)
 	setContactSensorState(status)
 }
 
@@ -398,10 +424,22 @@ def callApiGet(apipath, query, callback) {
 	try {
 		httpGet(params) { resp ->
 			log.debug "response data: ${resp.data}"
+			sendEvent(
+				name: "lastHttpStatus",
+				value: "succeed",
+				displayed: true,
+				descriptionText: "HTTP request succeeded",
+			)
 			callback(resp)
 		}
 	} catch (e) {
 		log.debug "API Error: $e"
 		setDoorState("unknown")
+		sendEvent(
+			name: "lastHttpStatus",
+			value: "failed",
+			displayed: true,
+			descriptionText: "HTTP request failed",
+		)
 	}
 }
