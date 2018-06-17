@@ -86,17 +86,18 @@ def doorHandler(evt) {
 }
 
 def presenceHandler(evt) {
-	log.debug "presenceHandler: $evt.value: $evt, $state, $settings"
+	def carName = evt.getDevice().displayName
+	log.debug "presenceHandler: $evt.value, $carName, $state, $settings"
 	def doorState = door.latestValue("door")
 	log.debug "Current garage state: ${doorState}"
 	if ("present" == evt.value) {
 		if (state.shouldOpen) {
-			def msg = "Opening ${door.label ?: door.name} because your car is home."
+			def msg = "Opening ${door.displayName} because $carName is home."
 			log.debug "${msg}"
 			sendPush(msg)
 			door.open()
 		} else {
-			def msg = "NOT auto opening ${door.label ?: door.name} as we didn't auto close it earlier"
+			def msg = "NOT auto opening ${door.displayName} as we didn't auto close it earlier"
 			log.debug "${msg}"
 			if (phone) {
 				sendSms(phone, msg)
@@ -113,13 +114,13 @@ def presenceHandler(evt) {
 		state.shouldOpen = shouldClose
 		if (shouldClose) {
 			log.debug "Closing at ${state.lastClose}"
-			def msg = "Closing ${door.label ?: door.name} because your car is leaving."
+			def msg = "Closing ${door.displayName} because $carName is leaving."
 			log.debug "${msg}"
 			sendPush(msg)
 			door.close()
 		} else {
 			def sec = elapsed / 1000
-			def msg = "NOT auto closing as ${door.label ?: door.name} was ${doorState} and last closing was ${sec}s ago"
+			def msg = "NOT auto closing as ${door.displayName} was ${doorState} and last closing was ${sec}s ago"
 			log.debug "${msg}"
 			if (phone) {
 				sendSms(phone, msg)
