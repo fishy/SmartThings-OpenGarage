@@ -28,8 +28,8 @@ metadata {
 		capability "Refresh"
 		capability "Switch"
 
-		attribute "doorStatus", "string"
-		attribute "lastHttpStatus", "string"
+		attribute "doorStatus", "enum", ["open", "closed"]
+		attribute "lastHttpStatus", "enum", ["succeeded", "failed"]
 	}
 
 	preferences {
@@ -452,7 +452,7 @@ def callApiGet(apipath, query, callback) {
 			log.debug "response data: ${resp.data}"
 			sendEvent(
 				name: "lastHttpStatus",
-				value: "succeed",
+				value: "succeeded",
 				displayed: true,
 				descriptionText: "HTTP request succeeded",
 			)
