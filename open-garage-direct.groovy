@@ -28,7 +28,6 @@ metadata {
 		capability "Refresh"
 		capability "Switch"
 
-		attribute "doorStatus", "enum", ["open", "closed"]
 		attribute "lastHttpStatus", "enum", ["succeeded", "failed"]
 	}
 
@@ -76,7 +75,7 @@ metadata {
 	}
 
 	tiles {
-		standardTile("sDoorToggle", "device.doorStatus", width: 1, height: 1, canChangeIcon: false) {
+		standardTile("sDoorToggle", "device.door", width: 1, height: 1, canChangeIcon: false) {
 			state(
 				"default",
 				label: "",
@@ -137,7 +136,7 @@ metadata {
 			)
 		}
 
-		standardTile("sRefresh", "device.doorStatus", inactiveLabel: false, decoration: "flat") {
+		standardTile("sRefresh", "device.door", inactiveLabel: false, decoration: "flat") {
 			state(
 				"default",
 				label: "",
@@ -419,7 +418,7 @@ def setContactSensorState(status) {
 
 def setDoorState(status) {
 	sendEvent(
-		name: "doorStatus",
+		name: "door",
 		value: status,
 		displayed: true,
 		descriptionText: "Door is $status",
