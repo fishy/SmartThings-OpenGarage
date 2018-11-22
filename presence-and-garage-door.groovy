@@ -54,6 +54,12 @@ preferences {
 			title: "Send SMS to this number?",
 			required: false,
 		)
+		input(
+			"contact",
+			"capability.contactSensor",
+			title: "Optional helper contact sensor",
+			required: false,
+		)
 	}
 }
 
@@ -76,11 +82,21 @@ def initialize() {
 	state.shouldOpen = false
 	subscribe(cars, "presence", presenceHandler)
 	subscribe(door, "door", doorHandler)
+	if (contact) {
+		subscribe(contact, "contact", contactHandler)
+	}
 }
 
 def doorHandler(evt) {
 	log.debug "doorHandler: $evt.value: $evt, $settings"
 	if ("closing" == evt.value || "closed" == evt.value) {
+		state.lastClose = now()
+	}
+}
+
+def contactHandler(evt) {
+	log.debug "contactHandler: $evt.value: $evt, $settings"
+	if ("closed" == evt.value) {
 		state.lastClose = now()
 	}
 }
