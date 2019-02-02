@@ -38,8 +38,8 @@ Refer to my [blynk-proxy](https://github.com/fishy/blynk-proxy) project for more
 details.
 You could setup your own proxy using blynk-proxy,
 or if after understanding the
-[risks](https://github.com/fishy/blynk-proxy/blob/master/README.md#should-i-use-your-heroku-app)
-you still don't mind, you could use `https://blynk-proxy.herokuapp.com`.
+[risks](https://github.com/fishy/blynk-proxy/blob/master/README.md#should-i-use-your-app-engine-app)
+you still don't mind, you could use `https://blynk-proxy.appspot.com`.
 
 ### State Refresh Rate
 
