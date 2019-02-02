@@ -70,12 +70,6 @@ This usually can be done in two ways:
    [nginx](https://www.nginx.com/)). You can configure HTTPS and/or HTTP
    authentication this way, but you need a 24/7 machine to make it work.
 
-You might need my two patches to the firmware applied to make it work properly
-with SmartThings and HTTPS reverse proxy.
-I have pre-built firmwares available at
-https://github.com/fishy/OpenGarage-Firmware/releases
-for your convenience.
-
 After you exposed your OpenGarage web UI to the internet, login to your
 [SmartThings developer account](https://graph.api.smartthings.com/),
 create a new Device Handler, and import the code.
