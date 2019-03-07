@@ -77,30 +77,13 @@ metadata {
 	tiles {
 		standardTile("sDoorToggle", "device.door", width: 1, height: 1, canChangeIcon: false) {
 			state(
-				"default",
-				label: "",
-			)
-
-			state(
 				"unknown",
 				label: "Unknown",
 				icon: "st.unknown.unknown.unknown",
 				action: "refresh.refresh",
 				backgroundColor: "#afafaf",
 			)
-			state(
-				"door_not_found",
-				label: "Not Found",
-				backgroundColor: "#CC1821",
-			)
 
-			state(
-				"stopped",
-				label: "Stopped",
-				icon: "st.contact.contact.open",
-				action: "close",
-				backgroundColor: "#ffdd00",
-			)
 			state(
 				"closed",
 				label: "Closed",
@@ -127,13 +110,6 @@ metadata {
 				icon: "st.doors.garage.garage-opening",
 				backgroundColor: "#ffdd00",
 			)
-			state(
-				"moving",
-				label: "Moving",
-				icon: "st.motion.motion.active",
-				action: "refresh.refresh",
-				backgroundColor: "#ffdd00",
-			)
 		}
 
 		standardTile("sRefresh", "device.door", inactiveLabel: false, decoration: "flat") {
@@ -148,13 +124,13 @@ metadata {
 		standardTile("sContact", "device.contact") {
 			state(
 				"open",
-				label: "${name}",
+				label: "Open",
 				icon: "st.contact.contact.open",
 				backgroundColor: "#ffa81e",
 			)
 			state(
 				"closed",
-				label: "${name}",
+				label: "Closed",
 				icon: "st.contact.contact.closed",
 				backgroundColor: "#79b821",
 			)
@@ -193,7 +169,7 @@ def push() {
 	getDoorStatus() { status -> initStatus = status }
 
 	def target
-	if (initStatus == "closed" || initStatus == "closing" || initStatus == "stopped" || initStatus == "moving") {
+	if (initStatus == "closed" || initStatus == "closing") {
 		log.debug "Door is in a closed status, opening"
 		target = "open"
 	} else if (initStatus == "open" || initStatus == "opening") {
@@ -387,7 +363,7 @@ def flipDoor() {
 
 def setContactSensorState(status) {
 	// Sync contact sensor
-	if (status == "open" || status == "opening" || status == "stopped") {
+	if (status == "open" || status == "opening") {
 		sendEvent(
 			name: "contact",
 			value: "open",
