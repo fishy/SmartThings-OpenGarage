@@ -28,6 +28,9 @@ metadata {
 		capability "Refresh"
 		capability "Switch"
 
+		capability "Actuator"
+		capability "Sensor"
+
 		attribute "lastHttpStatus", "enum", ["succeeded", "failed"]
 	}
 
