@@ -32,6 +32,9 @@ metadata {
 		capability "Sensor"
 
 		attribute "lastHttpStatus", "enum", ["succeeded", "failed"]
+		attribute "carStatus", "enum", ["present", "absent", "unknown"]
+		attribute "distance", "number"
+		attribute "readCount", "number"
 	}
 
 	preferences {
@@ -78,7 +81,7 @@ metadata {
 	}
 
 	tiles {
-		standardTile("sDoorToggle", "device.door", width: 1, height: 1, canChangeIcon: false) {
+		standardTile("sDoorToggle", "device.door", width: 2, height: 2, canChangeIcon: false) {
 			state(
 				"unknown",
 				label: "Unknown",
@@ -115,6 +118,24 @@ metadata {
 			)
 		}
 
+		standardTile("sCar", "device.carStatus") {
+			state(
+				"unknown",
+				label: "Car: Unknown",
+				backgroundColor: "#afafaf",
+			)
+			state(
+				"present",
+				label: "Car: Present",
+				backgroundColor: "#00a0dc",
+			)
+			state(
+				"absent",
+				label: "Car: Absent",
+				backgroundColor: "#ffdd00",
+			)
+		}
+
 		standardTile("sRefresh", "device.door", inactiveLabel: false, decoration: "flat") {
 			state(
 				"default",
@@ -140,7 +161,7 @@ metadata {
 		}
 
 		main(["sDoorToggle"])
-		details(["sDoorToggle", "sRefresh"])
+		details(["sDoorToggle", "sCar", "sRefresh"])
 	}
 }
 
@@ -316,20 +337,53 @@ def getDoorStatus(callback = {}) {
 	callApiGet("/jc") { resp ->
 		def value = resp.data.door
 		def state
-		if (value != 0 && value != 1) {
-			// Not json parsed, parse manually
-			// str should be something like:
-			// {"dist":146,"door":0,"vehicle":1,...}
-			def str = resp.data as String
-			def suffix = str.split('"door":')[1]
-			value = suffix.split(",")[0] as long
-		}
-		if (value == 0) {
+		switch(value) {
+		case 0:
 			state = "closed"
-		} else if (value == 1) {
+			break
+		case 1:
 			state = "open"
+			break
+		default:
+			state = "unknown"
 		}
-		log.debug "getDoorStatus: value = $value, state = $state"
+
+		def carValue = resp.data.vehicle
+		def carState
+		switch(carValue) {
+		case 0:
+			carState = "absent"
+			break
+		case 1:
+			carState = "present"
+			break
+		default:
+			carState = "unknown"
+		}
+		sendEvent(
+			name: "carStatus",
+			value: carState,
+			displayed: true,
+			descriptionText: "Car is $carState",
+		)
+
+		def dist = resp.data.dist
+		sendEvent(
+			name: "distance",
+			value: dist,
+			displayed: true,
+			descriptionText: "Distance is ${dist}cm"
+		)
+
+		def rcnt = resp.data.rcnt
+		sendEvent(
+			name: "readCount",
+			value: rcnt,
+			displayed: true,
+			descriptionText: "Read count is $rcnt"
+		)
+
+		log.debug "getDoorStatus: value = $value, state = $state, carValue = $carValue, carState = $carState"
 		callback(state)
 	}
 }
