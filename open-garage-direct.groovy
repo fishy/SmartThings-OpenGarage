@@ -372,7 +372,7 @@ def getDoorStatus(callback = {}) {
 			name: "distance",
 			value: dist,
 			displayed: true,
-			descriptionText: "Distance is ${dist}cm"
+			unit: "cm",
 		)
 
 		def rcnt = resp.data.rcnt
